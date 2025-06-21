@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat</title>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <meta name="theme-color" content="#e6e9c4">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://unpkg.com/htmx.org@2.0.4" integrity="sha384-HGfztofotfshcF7+8n44JQL2oJmowVChPTg48S+jvZoztPfvwD79OC/LTtG6dMp+" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="/static/styles.css">
+    <style>
+        body {
+            font-family: Arial;
+            margin: 0;
+            background-color:#f8f9ed;
+            max-height: 99vh;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        #chat-box {
+            border: 1px solid #ccc;
+            padding: 10px;
+            height: 70vh;
+            width: 50vw;
+            overflow-y: auto;
+            border: none;
+            background-color: #f8f9ed;
+            border-radius: 20px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: start;
+            flex-direction: column;
+        }
+        .message {
+            margin-bottom: 10px;
+            padding: 8px;
+            border-radius: 20px;
+            max-width: 70%;
+        }
+        .user {
+            background-color: #7fa85a;
+            color: #fff;
+            align-self: flex-end;
+            text-align: right;
+        }
+        .bot {
+            background-color: #e6e9c4;
+            color: #000;
+            align-self: flex-start;
+            text-align: left;
+        }
+        .input-area {
+            display: flex;
+            width: 50vw;
+        }
+        #user-input {
+            flex-grow: 1;
+            padding: 8px;
+            border: 2px solid black;
+            border-radius: 20px;
+            margin-right: 10px;
+            background-color: #7ea85a00;
+        }
+        .send-btn {
+            background-color: #ffffff00;
+            font-family: Merriweather;
+            border: 2px solid black;
+            border-radius: 20px;
+            padding: 8px 16px;
+        }
+        .send-btn:hover {
+            background-color: #7fa85a;
+            color: #f4f5fb;
+            border-color: #7fa85a;
+        }
+        @media (max-width: 560px) {
+            #chat-box, .input-area {
+                width: 90vw;
+            }
+            #user-input, .send-btn {
+                font-size: 16px;
+                border-radius: 30px;
+            }
+        }
+
+
+
+        /* Popup container - can be anything you want */
+.popup {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  width: 100px;
+  height: 90px;
+  border-radius: 50%;
+  background-color: #7fa85a;
+  margin-top: 67vh;
+}
+
+/* The actual popup */
+.popup .popuptext {
+  visibility: hidden;
+  width: fit-content;
+  background-color: #e6e9c4;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 20px 10px 8px 10px;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: -170%;
+  margin-left: 2px;
+}
+
+/* Popup arrow */
+.popup .popuptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 79%;
+/*   margin-right: -200px; */
+  border-width: 5px;
+  border-style: solid;
+  border-color:#e6e9c4 transparent transparent transparent;
+}
+/* Toggle this class - hide and show the popup */
+.popup .show {
+  visibility: visible;
+  -webkit-animation: fadeIn 1s;
+  animation: fadeIn 1s;
+}
+
+/* Add animation (fade in the popup) */
+@-webkit-keyframes fadeIn {
+  from {opacity: 0;} 
+  to {opacity: 1;}
+}
+
+@keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity:1 ;}
+}
+
+.section-chat{
+    display: flex; 
+    max-width: 90vw;
+    justify-content: center;
+    text-align: center;
+    margin-left: 10vw;
+    margin-right: 10vw;
+}
+
+.reminder-para{
+    margin-top: 28px;
+    line-height: 130%;
+    color: #f8f9ed;
+    font-size: 15px;
+    font-family: Merriweather;
+}
+
+.poptext-list{
+  padding-left: 0px;
+
+  gap: 20px;
+}
+
+.poptext-list-main{
+    font-size: 16px;
+    color: #000;
+    font-family: Merriweather;
+
+}
+
+
+.poptext-list-para{
+    font-size: 14px;
+    color: #7fa85a;
+    font-family: Merriweather;
+}
+
+    </style>
+    <link rel="stylesheet" href="./static/styles.css">
+</head>
+<body>
+  <header>
+    <div class="header-wrapper">
+      <div class="header-item">
+        <p class="header-item-para"><a href="./index.html">Home</a></p>
+      </div>
+      <div class="header-item">
+        <p class="header-item-para"><a href="./contact.html">Contact</a></p>
+      </div>
+    </div>
+</header>
+    <section class="section-chat">
+       <div class="container">
+           <div id="chat-box"></div>
+           <div class="input-area">
+              <input type="text" id="user-input" placeholder="Type a message...">
+              <button onclick="sendMessage()" class="send-btn">Send</button>
+           </div>
+       </div>
+       <div class="popup" onclick="myFunction()">
+        <p class="reminder-para">To keep in mind</p>
+            <span class="popuptext" id="myPopup">
+                <div class="poptext">
+                    <div class="poptext-list">
+                        <div class="poptext-list-item">
+                            <h4 class="poptext-list-main">Joi is not a real human!</h4>
+                            <p class="poptext-list-para"><!-- You are chatting with a technical assistant which does not understand what it says.  -->None of the messages are a product of emotions, opinions or believes.</p>
+                        </div>
+                        <div class="poptext-list-item">
+                            <h4 class="poptext-list-main">We do not save conversation history!</h4>
+                            <p class="poptext-list-para">You will not be able to come back to this conversation after closing the page.</p>
+                        </div>
+                        <!-- <div>
+                            <h4></h4>
+                            <p></p>
+                        </div> -->
+                    </div> 
+                </div>
+            </span>
+       </div>
+    </section>
+
+    <script>
+        // Store conversation history
+        let conversation = [];
+
+        async function sendMessage() {
+            const input = document.getElementById('user-input');
+            const message = input.value.trim();
+            const chatBox = document.getElementById('chat-box');
+
+            if (!message) return;
+
+            // Add user message to conversation and display
+            conversation.push({ role: 'user', content: message });
+            chatBox.innerHTML += `<div class="message user"><strong>You:</strong> ${message}</div>`;
+
+            try {
+                // Format conversation for LLaMA 3 chat template (Ollama-compatible)
+                let messages = [];
+                for (const msg of conversation) {
+                    messages.push({
+                        role: msg.role,
+                        content: msg.content
+                    });
+                }
+
+                // Send request to local Ollama instance
+                const res = await fetch('http://localhost:11434/v1/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        model: 'llama3', // Replace with 'llama3:8b' or 'llama3:70b' depending on your model
+                        messages: messages,
+                        max_tokens: 150,
+                        temperature: 0.7,
+                        top_p: 0.9
+                    })
+                });
+
+                // Read the response body once
+                const text = await res.text();
+                console.log('Ollama API Response Text:', text, 'Status:', res.status); // Debug: Log raw response
+
+                if (!res.ok) {
+                    let errorDetail = 'Unknown error';
+                    try {
+                        const errorData = JSON.parse(text);
+                        errorDetail = errorData.error || errorData.message || JSON.stringify(errorData);
+                    } catch (e) {
+                        errorDetail = text;
+                    }
+                    if (res.status === 400) {
+                        throw new Error(`Bad Request: ${errorDetail}. Ensure LLaMA 3 is installed and running in Ollama.`);
+                    } else if (res.status === 404) {
+                        throw new Error('Ollama endpoint not found. Verify that Ollama is running at http://localhost:11434.');
+                    } else if (res.status === 503) {
+                        throw new Error(`Service Unavailable: ${errorDetail}. Ollama may be starting up or the model may not be loaded.`);
+                    } else {
+                        throw new Error(`API request failed with status ${res.status}: ${errorDetail}`);
+                    }
+                }
+
+                let data;
+                try {
+                    data = JSON.parse(text);
+                } catch (jsonErr) {
+                    throw new Error(`Invalid JSON response: ${text}`);
+                }
+
+                let reply;
+                if (data && data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content) {
+                    reply = data.choices[0].message.content.trim();
+                    // Clean up any residual LLaMA 3 tokens, if present
+                    reply = reply.replace(/<\|.*?\|>/g, '').trim();
+                } else {
+                    reply = null;
+                }
+
+                if (reply) {
+                    conversation.push({ role: 'assistant', content: reply });
+                    chatBox.innerHTML += `<div class="message bot"><strong>Joi:</strong> ${reply}</div>`;
+                } else {
+                    chatBox.innerHTML += `<div style="color: red;"><strong>Error:</strong> Unexpected response from Ollama: ${JSON.stringify(data)}</div>`;
+                }
+            } catch (err) {
+                console.error('Error:', err);
+                chatBox.innerHTML += `<div style="color: red;"><strong>Error:</strong> ${err.message}. Ensure Ollama is running and LLaMA 3 is installed. See https://ollama.com for setup instructions.</div>`;
+            }
+
+            input.value = '';
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+
+        // When the user clicks on div, open the popup
+function myFunction() {
+  var popup = document.getElementById("myPopup");
+  popup.classList.toggle("show");
+}
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js" integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq" crossorigin="anonymous"></script>
+</body>
+</html>
