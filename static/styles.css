@@ -440,3 +440,53 @@ a{
     @media screen and (max-width: 560px) {
     }
 }
+
+
+.feedback{
+    background-color: #7fa85a;
+    margin-top:100px;
+    display: flex;
+    justify-content: center;
+}
+
+.feedback-div{
+    display: flex;
+    text-align: center;
+    flex-direction: column;
+    margin-top: 70px;
+    margin-bottom: 70px;
+}
+
+.feedback-para{
+    font-family: poppins;
+    font-size: 20px;
+}
+
+.feedback-btn{
+    background-color: #ffffff00;
+    font-size: 18px;
+    font-family: Merriweather;
+    border: 2px solid black;
+    border-radius: 20px;
+    padding: 6px 12px;
+}
+
+
+.feedback-btn:hover{
+    background-color: #e6e9c4;
+    font-size: 18px;
+    color: black;
+    font-family: Merriweather;
+    border: 2px solid #e6e9c4;
+    border-radius: 20px;
+    padding: 6px 12px;
+}
+
+.feedback-input-area{
+        flex-grow: 1;
+        padding: 8px;
+        border: 2px solid black;
+        border-radius: 20px;
+        margin-right: 10px;
+        background-color: #7ea85a00;
+}
