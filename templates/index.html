@@ -36,11 +36,9 @@
   <header>
     <div class="header-wrapper">
       <div class="header-item">
-        <p class="header-item-para"><a href="./about.html">About</a></p>
-      </div>
+        <p class="header-item-para"><a href="{{ url_for('about') }}">About</a></p>      </div>
       <div class="header-item">
-        <p class="header-item-para header-item-para2"><a href="./contact.html">Contact</a></p> 
-    </div>
+        <p class="header-item-para header-itemPara2"><a href="{{ url_for('contact') }}">Contact</a></p>    </div>
   </header>
   
   <section class="main">
@@ -49,8 +47,8 @@
       <!-- <p class="main-para">Made simple. Made for you</p> -->
       <p class="main-para">from users for users</p>
       <div class="main-btn-wrapper">
-        <button class="main-btn"><a href="./tutorial.html">Functionality</a></button>
-        <button class="main-btn"><a href="./chat.html">Chat</a></button>
+        <button class="main-btn"><a href="{{ url_for('tutorial') }}">Functionality</a></button>
+                <button class="main-btn"><a href="{{ url_for('chat') }}">Chat</a></button>
       </div>
     </div>
   </section>
