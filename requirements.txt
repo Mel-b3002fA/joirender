@@ -37,3 +37,4 @@ wheel==0.45.1
 wrapt==1.17.2
 gunicorn==22.0.0
 flask==3.0.3
+ollama==0.5.1
