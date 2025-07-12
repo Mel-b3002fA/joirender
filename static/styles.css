@@ -14,7 +14,7 @@ a{
     color: inherit;
 }
 .body-main{
-    background-image: url(/img/background2.png);
+    background-image: url('/img/background2.png');
     background-repeat: no-repeat;
     background-position: center;
     background-position-y: center;

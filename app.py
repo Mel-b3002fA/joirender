@@ -75,6 +75,9 @@ def process_chat():
         print("Error from Ollama:", e)
         return jsonify({'reply': "Sorry, something went wrong connecting to the model."}), 500
 
+with open("/Users/melaniiaboblieva/joi.updated/joisquashed/env.log", "a") as f:
+    f.write(f"OLLAMA_HOST: {os.getenv('OLLAMA_HOST')}\n")
+
 if __name__ == '__main__':
     # Bind to 0.0.0.0 and use PORT from environment for Vercel compatibility
     port = int(os.environ.get('PORT', 8001))

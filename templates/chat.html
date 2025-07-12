@@ -119,9 +119,11 @@
   position: absolute;
   z-index: 1;
   bottom: 125%;
-  left: -170%;
-  margin-left: 2px;
+  left: -49%;
+  margin-left: 3px;
 }
+
+
 
 /* Popup arrow */
 .popup .popuptext::after {
@@ -189,10 +191,15 @@
     font-family: Merriweather;
 }
 
+.chatandwarning{
+    display: flex;
+    flex-wrap: wrap;
+}
+
     </style>
     <link rel="stylesheet" href="./static/styles.css">
 </head>
-<body>
+<body class="body">
     <header>
         <div class="header-wrapper">
           <div class="header-item">
@@ -203,6 +210,7 @@
           </div>
         </div>
     </header>
+<div class="chatandwarning">
     <section class="section-chat">
        <div class="container">
            <div id="chat-box"></div>
@@ -211,28 +219,31 @@
               <button onclick="sendMessage()" class="send-btn">Send</button>
            </div>
        </div>
-       <div class="popup" onclick="myFunction()">
-        <p class="reminder-para">To keep in mind</p>
-            <span class="popuptext" id="myPopup">
-                <div class="poptext">
-                    <div class="poptext-list">
-                        <div class="poptext-list-item">
-                            <h4 class="poptext-list-main">Joi is not a real human!</h4>
-                            <p class="poptext-list-para"><!-- You are chatting with a technical assistant which does not understand what it says.  -->None of the messages are a product of emotions, opinions or believes.</p>
-                        </div>
-                        <div class="poptext-list-item">
-                            <h4 class="poptext-list-main">We do not save conversation history!</h4>
-                            <p class="poptext-list-para">You will not be able to come back to this conversation after closing the page.</p>
-                        </div>
-                        <!-- <div>
-                            <h4></h4>
-                            <p></p>
-                        </div> -->
-                    </div> 
-                </div>
-            </span>
-       </div>
     </section>
+    <section>
+        <div class="popup" onclick="myFunction()">
+            <p class="reminder-para">To keep in mind</p>
+                <span class="popuptext" id="myPopup">
+                    <div class="poptext">
+                        <div class="poptext-list">
+                            <div class="poptext-list-item">
+                                <h4 class="poptext-list-main">Joi is not a real human!</h4>
+                                <p class="poptext-list-para"><!-- You are chatting with a technical assistant which does not understand what it says.  -->None of the messages are a product of emotions, opinions or believes.</p>
+                            </div>
+                            <div class="poptext-list-item">
+                                <h4 class="poptext-list-main">We do not save conversation history!</h4>
+                                <p class="poptext-list-para">You will not be able to come back to this conversation after closing the page.</p>
+                            </div>
+                            <!-- <div>
+                                <h4></h4>
+                                <p></p>
+                            </div> -->
+                        </div> 
+                    </div>
+                </span>
+           </div>
+    </section>
+</div>
 
     <script>
         // Store conversation history
