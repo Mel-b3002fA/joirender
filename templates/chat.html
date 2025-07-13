@@ -15,6 +15,7 @@
             margin: 0;
             background-color:#f8f9ed;
             max-height: 99vh;
+
         }
         .container {
             display: flex;
@@ -120,10 +121,16 @@
   position: absolute;
   z-index: 1;
   bottom: 125%;
-  left: -49%;
+  left: -56%;
   margin-left: 3px;
+  width: 200px;
 }
 
+.popupsection{
+    position: relative;
+    margin-left: 1100px;
+    width: 100px;
+}
 
 
 /* Popup arrow */
@@ -131,7 +138,7 @@
   content: "";
   position: absolute;
   top: 100%;
-  left: 79%;
+  left: 50%;
 /*   margin-right: -200px; */
   border-width: 5px;
   border-style: solid;
@@ -162,6 +169,7 @@
     text-align: center;
     margin-left: 10vw;
     margin-right: 10vw;
+    position: fixed;
 }
 
 .reminder-para{
@@ -194,7 +202,7 @@
 
 .chatandwarning{
     display: flex;
-    flex-wrap: wrap;
+    justify-content: center;
 }
 
     </style>
@@ -211,6 +219,7 @@
           </div>
         </div>
     </header>
+
 <div class="chatandwarning">
     <section class="section-chat">
        <div class="container">
@@ -221,7 +230,7 @@
            </div>
        </div>
     </section>
-    <section>
+    <section class="popupsection"> 
         <div class="popup" onclick="myFunction()">
             <p class="reminder-para">To keep in mind</p>
                 <span class="popuptext" id="myPopup">
