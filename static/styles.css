@@ -382,7 +382,7 @@ a{
     width: 100%;
     display: flex;
     justify-content: center;
-    @media screen and (max-width: 560px) {
+    @media screen and (max-width: 561px) {
   width: 30vw;
   flex-direction: column;
     }
