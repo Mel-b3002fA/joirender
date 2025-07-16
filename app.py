@@ -60,7 +60,7 @@ def process_chat():
         if 'message' in response and 'content' in response['message']:
             reply = response['message']['content']
             print(f"Joi replied: {reply}")
-            
+
             # Append AI reply to conversation
             conversation.append({'role': 'assistant', 'content': reply})
 
@@ -75,11 +75,7 @@ def process_chat():
         print("Error from Ollama:", e)
         return jsonify({'reply': "Sorry, something went wrong connecting to the model."}), 500
 
-with open("/Users/melaniiaboblieva/joi.updated/joisquashed/env.log", "a") as f:
-    f.write(f"OLLAMA_HOST: {os.getenv('OLLAMA_HOST')}\n")
-
 if __name__ == '__main__':
     # Bind to 0.0.0.0 and use PORT from environment for Vercel compatibility
     port = int(os.environ.get('PORT', 8001))
-    """ app.run(host='0.0.0.0', port=port, debug=False) """
-    app.run(host='0.0.0.0', port=port, debug=True)
+    app.run(host='0.0.0.0', port=port, debug=False)
