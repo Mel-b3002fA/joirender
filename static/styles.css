@@ -14,12 +14,13 @@ a{
     color: inherit;
 }
 .body-main{
-    background-image: url('/static/img/background2.png');    background-repeat: no-repeat;
+    background-image: url('/static/img/background2.png');    
+    background-repeat: no-repeat;
     background-position: center;
     background-position-y: center;
     height: 100vh;
     @media screen and (max-width: 560px) {
-        background-image: url(/img/backgroundtel.png);
+        background-image: url('/static/img/backgroundtel.png'); 
      }
 }
 
