@@ -6,8 +6,6 @@ import os
 app = Flask(__name__, template_folder="templates", static_folder="static")
 
 # Set the base URL for Ollama
-# Note: For Vercel, this cannot be localhost. Host Ollama externally or use a cloud-based AI API.
-# Replace with the external Ollama URL or alternative API endpoint (e.g., xAI Grok API).
 ollama_url = os.environ.get('OLLAMA_URL', 'http://localhost:11434/api/chat')
 
 # Configure Ollama client with the custom URL
@@ -46,6 +44,14 @@ def process_chat():
     user_message = data['message']
     print(f"User said: {user_message}")
 
+    # Log to file only in non-production environments
+    if os.getenv('ENV') != 'production':
+        try:
+            with open('env.log', 'a') as f:
+                f.write(f"User said: {user_message}\n")
+        except Exception as e:
+            print(f"Failed to write to log file: {e}")
+
     # Append user message to conversation
     conversation.append({'role': 'user', 'content': user_message})
 
@@ -60,6 +66,14 @@ def process_chat():
         if 'message' in response and 'content' in response['message']:
             reply = response['message']['content']
             print(f"Joi replied: {reply}")
+
+            # Log AI reply to file only in non-production environments
+            if os.getenv('ENV') != 'production':
+                try:
+                    with open('env.log', 'a') as f:
+                        f.write(f"Joi replied: {reply}\n")
+                except Exception as e:
+                    print(f"Failed to write to log file: {e}")
 
             # Append AI reply to conversation
             conversation.append({'role': 'assistant', 'content': reply})
