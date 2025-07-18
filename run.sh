@@ -1,10 +1,4 @@
 
-# lsof -ti:8000 | xargs kill -9 2>/dev/null
-
-
-# python server.py
-
-
 PORT=8000
 
 
@@ -36,3 +30,5 @@ fi
 
 echo "Starting Flask server..."
 python server.py
+
+
