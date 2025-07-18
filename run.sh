@@ -1,15 +1,23 @@
+#!/bin/bash
+PORT=$PORT
 
-PORT=8000
+# Start Ollama server in the background
+echo "Starting Ollama server..."
+ollama serve &
+# Record the process ID
+OLLAMA_PID=$!
+# Wait for Ollama to start
+sleep 5
 
-
-if [ -z "$VIRTUAL_ENV" ]; then
-    echo "Activating virtual environment..."
-    source .venv/bin/activate
+# Check if Ollama is running
+if ! ps -p $OLLAMA_PID > /dev/null; then
+    echo "Error: Ollama server failed to start. Exiting."
+    exit 1
 else
-    echo "Virtual environment already activated: $VIRTUAL_ENV"
+    echo "Ollama server started with PID $OLLAMA_PID"
 fi
 
-
+# Check for processes on port $PORT
 echo "Checking for processes on port $PORT..."
 PIDS=$(lsof -ti :$PORT)
 if [ -n "$PIDS" ]; then
@@ -20,7 +28,6 @@ else
     echo "No processes found on port $PORT"
 fi
 
-
 if lsof -i :$PORT > /dev/null; then
     echo "Error: Port $PORT is still in use. Exiting."
     exit 1
@@ -28,7 +35,14 @@ else
     echo "Port $PORT is free."
 fi
 
-echo "Starting Flask server..."
-python server.py
+# Activate virtual environment if needed
+if [ -z "$VIRTUAL_ENV" ]; then
+    echo "Activating virtual environment..."
+    source .venv/bin/activate
+else
+    echo "Virtual environment already activated: $VIRTUAL_ENV"
+fi
 
-
+# Start Gunicorn server
+echo "Starting Gunicorn server..."
+gunicorn --bind 0.0.0.0:$PORT app:app
