@@ -35,14 +35,6 @@ else
     echo "Port $PORT is free."
 fi
 
-# Activate virtual environment if needed
-if [ -z "$VIRTUAL_ENV" ]; then
-    echo "Activating virtual environment..."
-    source .venv/bin/activate
-else
-    echo "Virtual environment already activated: $VIRTUAL_ENV"
-fi
-
 # Start Gunicorn server
 echo "Starting Gunicorn server..."
 gunicorn --bind 0.0.0.0:$PORT app:app
