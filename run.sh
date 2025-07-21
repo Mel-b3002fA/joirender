@@ -1,8 +1,11 @@
 #!/bin/bash
 PORT=$PORT
 
+
+
 # Start Ollama server in the background
 echo "Starting Ollama server..."
+ollama pull llama3:8b
 ollama serve &
 # Record the process ID
 OLLAMA_PID=$!

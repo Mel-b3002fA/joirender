@@ -1,20 +1,26 @@
-# Use a Python base image with root access
+# Use a slim Python base image
 FROM python:3.10-slim
 
-# Install curl and Ollama as root
-RUN apt-get update && apt-get install -y curl && \
-    curl -fsSL https://ollama.com/install.sh | sh && \
-    ollama pull llama3:8b
+# Install system dependencies for Ollama
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Ollama
+RUN curl -fsSL https://ollama.com/install.sh | sh
+
+# Pull Llama3:8b model during build (optional, can be done in run.sh to reduce build time)
+# RUN ollama pull llama3:8b
 
 # Set working directory
 WORKDIR /app
 
 # Install Poetry
-RUN pip install poetry
+RUN pip install --no-cache-dir poetry==2.1.3
 
 # Copy Poetry files and install dependencies
 COPY pyproject.toml poetry.lock* ./
-RUN poetry config virtualenvs.create false && poetry install --no-root
+RUN poetry config virtualenvs.create false && poetry install --no-dev --no-interaction --no-ansi
 
 # Copy application files
 COPY . .
