@@ -9,9 +9,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Install Ollama
 RUN curl -fsSL https://ollama.com/install.sh | sh
 
-# Pull Llama3:8b model during build (optional, can be done in run.sh to reduce build time)
-# RUN ollama pull llama3:8b
-
 # Set working directory
 WORKDIR /app
 
