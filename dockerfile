@@ -30,4 +30,4 @@ RUN chmod +x /app/run.sh
 EXPOSE 8000 11434
 
 # Start Ollama and Gunicorn via run.sh
-CMD ["/app/run.sh"]
+CMD ["/run.sh"]
