@@ -22,7 +22,7 @@ RUN poetry config virtualenvs.create false && poetry install --no-dev --no-inter
 # Copy application files
 COPY . .
 
-# Copy and make run.sh executable
+# Copy run.sh from repository root to /app/run.sh
 COPY run.sh /app/run.sh
 RUN chmod +x /app/run.sh
 
@@ -30,4 +30,4 @@ RUN chmod +x /app/run.sh
 EXPOSE 8000 11434
 
 # Start Ollama and Gunicorn via run.sh
-CMD ["/run.sh"]
+CMD ["/app/run.sh"]

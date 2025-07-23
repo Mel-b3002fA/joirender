@@ -13,6 +13,7 @@ a{
     text-decoration: none;
     color: inherit;
 }
+
 .body-main{
     background-image: url('/static/img/background2.png');    
     background-repeat: no-repeat;
@@ -21,7 +22,7 @@ a{
     height: 100vh;
     @media screen and (max-width: 560px) {
         background-image: url('/static/img/backgroundtel.png'); 
-     }
+    }
 }
 
 .header-wrapper{
