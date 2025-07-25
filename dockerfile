@@ -22,7 +22,7 @@ RUN poetry config virtualenvs.create false && poetry install --no-dev --no-inter
 # Copy application files
 COPY . .
 
-# Explicitly copy run.sh to /app/run.sh
+# Copy and make run.sh executable
 COPY run.sh /app/run.sh
 RUN chmod +x /app/run.sh
 
