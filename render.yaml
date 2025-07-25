@@ -13,6 +13,3 @@ services:
         value: http://localhost:11434/api/chat
       - key: ENV
         value: production
-
-
-        
