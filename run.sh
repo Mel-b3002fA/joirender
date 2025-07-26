@@ -1,12 +1,12 @@
 #!/bin/bash
 
-# Start Ollama in the background
+# Start Ollama
 ollama serve &
 
 # Wait for Ollama to be ready
-sleep 5
+sleep 2
 
-# Pull Llama3:8b model if not already pulled
+# Pull Llama3:8b model
 ollama pull llama3:8b
 
 # Start Gunicorn for Flask app
