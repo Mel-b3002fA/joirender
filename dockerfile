@@ -19,9 +19,13 @@ RUN pip install --no-cache-dir poetry==2.1.3
 COPY pyproject.toml poetry.lock* ./
 RUN poetry config virtualenvs.create false && poetry install --no-dev --no-interaction --no-ansi
 
-# Debug: List files in build context before copying run.sh
+# Debug: List files in build context before copying
 RUN echo "Listing files in build context..." && \
     ls -la
+
+# Debug: Check for .dockerignore
+RUN echo "Checking for .dockerignore..." && \
+    [ -f .dockerignore ] && cat .dockerignore || echo "No .dockerignore found"
 
 # Copy run.sh explicitly and debug
 COPY run.sh /app/run.sh
