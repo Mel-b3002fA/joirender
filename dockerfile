@@ -1,6 +1,9 @@
 # Use a slim Python base image
 FROM python:3.10-slim
 
+# Debug: Confirm Dockerfile is being used
+RUN echo "Starting Dockerfile build for joisquashed..."
+
 # Install system dependencies for Ollama
 RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
@@ -19,7 +22,7 @@ RUN pip install --no-cache-dir poetry==2.1.3
 COPY pyproject.toml poetry.lock* ./
 RUN poetry config virtualenvs.create false && poetry install --no-dev --no-interaction --no-ansi
 
-# Debug: List files in build context before copying
+# Debug: List files in build context
 RUN echo "Listing files in build context..." && \
     ls -la
 
