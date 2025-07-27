@@ -31,7 +31,7 @@ RUN echo "Checking for .dockerignore..." && \
     [ -f .dockerignore ] && cat .dockerignore || echo "No .dockerignore found"
 
 # Copy run.sh explicitly and debug
-COPY run.sh /app/run.sh
+# COPY run.sh /app/run.sh
 RUN echo "Checking run.sh after copy..." && \
     ls -l /app/run.sh || { echo "ERROR: run.sh not found at /app/run.sh"; exit 1; } && \
     file /app/run.sh && \
