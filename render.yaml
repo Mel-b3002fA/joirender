@@ -2,7 +2,7 @@ services:
   - type: web
     name: llama3-flask-app
     env: docker
-    dockerfilePath: ./Dockerfile
+    dockerfilePath: ./dockerfile
     plan: free
     envVars:
       - key: PYTHON_VERSION

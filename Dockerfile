@@ -1,8 +1,8 @@
 # Use a slim Python base image
 FROM python:3.10-slim
 
-# Debug: Confirm Dockerfile is being used
-RUN echo "Starting Dockerfile build for joisquashed..."
+# Debug: Confirm dockerfile is being used
+RUN echo "Starting dockerfile build for joisquashed..."
 
 # Install system dependencies for Ollama
 RUN apt-get update && apt-get install -y --no-install-recommends \
