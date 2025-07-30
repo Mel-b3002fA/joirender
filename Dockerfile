@@ -9,18 +9,18 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Ollama
-RUN curl -fsSL https://ollama.com/install.sh | sh
+# Install Ollama with retry logic
+RUN for i in 1 2 3; do curl -fsSL https://ollama.com/install.sh | sh && break || sleep 5; done
 
 # Set working directory
 WORKDIR /app
 
-# Install Poetry
-RUN pip install --no-cache-dir poetry==2.1.3
+# Install Poetry with retry logic
+RUN for i in 1 2 3; do pip install --no-cache-dir poetry==2.1.3 && break || sleep 5; done
 
 # Copy Poetry files and install dependencies
 COPY pyproject.toml poetry.lock* ./
-RUN poetry config virtualenvs.create false && poetry install --no-dev --no-interaction --no-ansi
+RUN poetry config virtualenvs.create false && poetry install --only main --no-root --no-interaction --no-ansi
 
 # Debug: List files in build context
 RUN echo "Listing files in build context..." && \
@@ -34,7 +34,6 @@ RUN echo "Checking for .dockerignore..." && \
 COPY run.sh /app/run.sh
 RUN echo "Checking run.sh after copy..." && \
     ls -l /app/run.sh || { echo "ERROR: run.sh not found at /app/run.sh"; exit 1; } && \
-    file /app/run.sh && \
     cat /app/run.sh && \
     chmod +x /app/run.sh && \
     echo "run.sh permissions set"
@@ -45,7 +44,6 @@ COPY . .
 # Verify run.sh after full copy
 RUN echo "Verifying run.sh after COPY . . ..." && \
     ls -l /app/run.sh || { echo "ERROR: run.sh missing after COPY . ."; exit 1; } && \
-    file /app/run.sh && \
     cat /app/run.sh
 
 # Expose ports (8000 for Gunicorn, 11434 for Ollama)

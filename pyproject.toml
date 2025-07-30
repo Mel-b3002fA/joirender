@@ -1,12 +1,14 @@
 [tool.poetry]
 name = "llama3-flask-app"
 version = "0.1.0"
-description = "Flask app with Llama3 via Ollama"
+description = "A Flask app with Ollama integration"
 authors = ["Your Name <your.email@example.com>"]
+readme = "README.md"
+package-mode = false  # Disable packaging since --no-root is used
 
 [tool.poetry.dependencies]
 python = "^3.10"
-flask = "^2.0.0"
+flask = "^2.3.3"
 gunicorn = "^20.1.0"
 ollama = "^0.1.9"
 
