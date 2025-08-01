@@ -15,7 +15,7 @@ services:
          - key: PORT
            value: 8000  
          - key: OLLAMA_URL
-           value: http://localhost:11434/api/chat
+           value: http://localhost:11434
          - key: ENV
            value: production
 
