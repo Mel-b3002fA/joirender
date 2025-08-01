@@ -1,15 +1,20 @@
 from flask import Flask, request, jsonify, render_template
 import ollama
 import os
+import logging
+
+# Configure logging
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
 # Initialize Flask with explicit template and static folders
 app = Flask(__name__, template_folder="templates", static_folder="static")
 
-# Set the base URL for Ollama
-ollama_url = os.environ.get('OLLAMA_URL', 'http://localhost:11434/api/chat')
+# Set the base URL for Ollama (remove /api/chat)
+ollama_url = os.environ.get('OLLAMA_URL', 'http://localhost:11434').rstrip('/api/chat')
+logging.info(f"Using Ollama URL: {ollama_url}")
 
-# Configure Ollama client with the custom URL
-ollama.Client(host=ollama_url)
+# Initialize Ollama client
+client = ollama.Client(host=ollama_url)
 
 conversation = []
 
@@ -39,10 +44,11 @@ def process_chat():
 
     # Validate input
     if not data or 'message' not in data:
+        logging.error("Invalid request: message field missing")
         return jsonify({'reply': 'Invalid message'}), 400
 
     user_message = data['message']
-    print(f"User said: {user_message}")
+    logging.info(f"User said: {user_message}")
 
     # Log to file only in non-production environments
     if os.getenv('ENV') != 'production':
@@ -50,22 +56,22 @@ def process_chat():
             with open('env.log', 'a') as f:
                 f.write(f"User said: {user_message}\n")
         except Exception as e:
-            print(f"Failed to write to log file: {e}")
+            logging.error(f"Failed to write to log file: {e}")
 
     # Append user message to conversation
     conversation.append({'role': 'user', 'content': user_message})
 
     try:
-        # Send the conversation history (including user input) to Ollama
-        response = ollama.chat(
-            model='llama3',
+        # Send the conversation history to Ollama using the client
+        response = client.chat(
+            model='llama3:8b',  # Use correct model name
             messages=conversation
         )
 
         # Check if the response has the expected structure
         if 'message' in response and 'content' in response['message']:
             reply = response['message']['content']
-            print(f"Joi replied: {reply}")
+            logging.info(f"Joi replied: {reply}")
 
             # Log AI reply to file only in non-production environments
             if os.getenv('ENV') != 'production':
@@ -73,28 +79,34 @@ def process_chat():
                     with open('env.log', 'a') as f:
                         f.write(f"Joi replied: {reply}\n")
                 except Exception as e:
-                    print(f"Failed to write to log file: {e}")
+                    logging.error(f"Failed to write to log file: {e}")
 
             # Append AI reply to conversation
             conversation.append({'role': 'assistant', 'content': reply})
 
-            return jsonify({'reply': reply})
+            return jsonify({'reply': reply}), 200
 
         else:
-            print("Error: Unexpected response format")
+            logging.error(f"Unexpected response format: {response}")
             return jsonify({'reply': "Sorry, something went wrong with the model's response."}), 500
 
     except Exception as e:
-        # Catch errors and return a fallback response
-        print("Error from Ollama:", e)
-        return jsonify({'reply': "Sorry, something went wrong connecting to the model."}), 500
+        logging.error(f"Error from Ollama: {str(e)}", exc_info=True)
+        return jsonify({
+            'reply': "Sorry, something went wrong connecting to the model.",
+            'error': str(e)
+        }), 500
+
+@app.route('/test-ollama', methods=['GET'])
+def test_ollama():
+    try:
+        response = client.list()
+        logging.info(f"Ollama models: {response}")
+        return jsonify(response), 200
+    except Exception as e:
+        logging.error(f"Ollama test error: {str(e)}", exc_info=True)
+        return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
-    # Bind to 0.0.0.0 and use PORT from environment for Vercel compatibility
-    port = int(os.environ.get('PORT', 8001))
-    app.run(host='0.0.0.0', port=port, debug=True)
-
-
-    
-
-
+    port = int(os.environ.get('PORT', 8000))
+    app.run(host='0.0.0.0', port=port, debug=False)
