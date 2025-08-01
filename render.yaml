@@ -1,15 +1,16 @@
 services:
-  - type: web
-    name: "llama3-flask-app"
-    env: docker
-    dockerfilePath: ./dockerfile
-    plan: free
-    envVars:
-      - key: PYTHON_VERSION
-        value: 3.10.0
-      - key: PORT
-        value: 8000
-      - key: OLLAMA_URL
-        value: http://localhost:11434/api/chat
-      - key: ENV
-        value: production
+     - type: web
+       name: "llama3-flask-app"
+       env: docker
+       dockerfilePath: ./Dockerfile
+       dockerCommand: /app/run.sh
+       plan: free
+       envVars:
+         - key: PYTHON_VERSION
+           value: 3.10.0
+         - key: PORT
+           value: 8000  # Explicitly set to 8000
+         - key: OLLAMA_URL
+           value: http://localhost:11434/api/chat
+         - key: ENV
+           value: production
