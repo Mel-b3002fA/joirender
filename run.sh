@@ -1,21 +1,29 @@
 #!/bin/bash
 
+# Enable verbose output for debugging
+set -x
+
 # Start Ollama in the background
 ollama serve &
 
 # Wait for Ollama to be ready
-until curl -s http://localhost:11434/api/tags > /dev/null; do
+timeout 60 bash -c 'until curl -s http://localhost:11434/api/tags > /dev/null; do
     echo "Waiting for Ollama to start..."
     sleep 2
-done
+done' || { echo "ERROR: Ollama failed to start within 60 seconds"; exit 1; }
 
 # Check if llama3:8b model exists, pull if not
 if ! ollama list | grep -q "llama3:8b"; then
     echo "Pulling llama3:8b model..."
-    ollama pull llama3:8b
+    ollama pull llama3:8b || { echo "ERROR: Failed to pull llama3:8b model"; exit 1; }
 else
     echo "llama3:8b model already exists, skipping pull"
 fi
 
-# Start Gunicorn for Flask app
-poetry run gunicorn --bind 0.0.0.0:8000 app:app
+# Verify Ollama API is responding
+curl -s http://localhost:11434/api/tags || { echo "ERROR: Ollama API not responding"; exit 1; }
+echo "Ollama API tags response:"
+curl -s http://localhost:11434/api/tags
+
+# Start Gunicorn with increased timeout and logging
+poetry run gunicorn --bind 0.0.0.0:8000 --timeout 120 --log-level debug app:app
