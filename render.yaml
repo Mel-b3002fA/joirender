@@ -1,24 +1,22 @@
 services:
-     - type: web
-       name: "llama3-flask-app"
-       env: docker
-       dockerfilePath: ./Dockerfile
-       dockerCommand: /app/run.sh
-        disk:
+  - type: web
+    name: "llama3-flask-app"
+    env: docker
+    dockerfilePath: ./Dockerfile
+    dockerCommand: /app/run.sh
+    plan: starter  
+    disk:
       name: ollama-models
       mountPath: /root/.ollama
       sizeGB: 1 
-       plan: free
-       envVars:
-         - key: PYTHON_VERSION
-           value: 3.10.0
-         - key: PORT
-           value: 8000  
-         - key: OLLAMA_URL
-           value: http://localhost:11434
-         - key: ENV
-           value: production
-
-
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.10.0
+      - key: PORT
+        value: 8000
+      - key: OLLAMA_URL
+        value: http://localhost:11434  
+      - key: ENV
+        value: production
 
  
