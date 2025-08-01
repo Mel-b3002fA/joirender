@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Enable verbose output for debugging
+# Enable verbose output
 set -x
 
 # Start Ollama in the background
@@ -20,10 +20,9 @@ else
     echo "llama3:8b model already exists, skipping pull"
 fi
 
-# Verify Ollama API is responding
-curl -s http://localhost:11434/api/tags || { echo "ERROR: Ollama API not responding"; exit 1; }
+# Verify Ollama API
 echo "Ollama API tags response:"
-curl -s http://localhost:11434/api/tags
+curl -s http://localhost:11434/api/tags || { echo "ERROR: Ollama API not responding"; exit 1; }
 
-# Start Gunicorn with increased timeout and logging
-poetry run gunicorn --bind 0.0.0.0:8000 --timeout 120 --log-level debug app:app
+# Start Gunicorn with gthread workers and increased timeout
+poetry run gunicorn --bind 0.0.0.0:8000 --timeout 120 --log-level debug --worker-class gthread app:app
