@@ -9,7 +9,7 @@ logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %
 # Initialize Flask with explicit template and static folders
 app = Flask(__name__, template_folder="templates", static_folder="static")
 
-# Set the base URL for Ollama (remove /api/chat)
+# Set the base URL for Ollama
 ollama_url = os.environ.get('OLLAMA_URL', 'http://localhost:11434').rstrip('/api/chat')
 logging.info(f"Using Ollama URL: {ollama_url}")
 
@@ -41,6 +41,7 @@ def tutorial():
 @app.route('/chat', methods=['POST'])
 def process_chat():
     data = request.get_json()
+    logging.debug(f"Received POST /chat with data: {data}")
 
     # Validate input
     if not data or 'message' not in data:
@@ -62,18 +63,20 @@ def process_chat():
     conversation.append({'role': 'user', 'content': user_message})
 
     try:
-        # Send the conversation history to Ollama using the client
+        # Send the conversation history to Ollama
+        logging.debug("Sending request to Ollama")
         response = client.chat(
-            model='llama3:8b',  # Use correct model name
+            model='phi3:mini',  # Changed to phi3:mini
             messages=conversation
         )
+        logging.debug(f"Ollama response: {response}")
 
-        # Check if the response has the expected structure
+        # Check response structure
         if 'message' in response and 'content' in response['message']:
             reply = response['message']['content']
             logging.info(f"Joi replied: {reply}")
 
-            # Log AI reply to file only in non-production environments
+            # Log AI reply to file
             if os.getenv('ENV') != 'production':
                 try:
                     with open('env.log', 'a') as f:
