@@ -47,7 +47,7 @@ def process_chat():
         logging.error("Invalid request: message field missing")
         return jsonify({'reply': 'Invalid message'}), 400
 
- user_message = data['message']
+    user_message = data['message']
     logging.info(f"User said: {user_message}")
 
     # Log to file only in non-production environments
@@ -61,27 +61,18 @@ def process_chat():
     # Append user message to conversation
     conversation.append({'role': 'user', 'content': user_message})
 
-   try:
-        # Send the conversation history to Ollama
-        logging.debug("Sending request to Ollama")
+    try:
+        # Send the conversation history to Ollama using the client
         response = client.chat(
-            model='llama3:8b',  # Or 'phi3:mini' if testing smaller model
+            model='llama3:8b',  # Use correct model name
             messages=conversation
         )
-        logging.debug(f"Ollama response: {response}")
 
-      # Check response structure
+        # Check if the response has the expected structure
         if 'message' in response and 'content' in response['message']:
             reply = response['message']['content']
             logging.info(f"Joi replied: {reply}")
 
-            # Log AI reply to file
-            if os.getenv('ENV') != 'production':
-                try:
-                    with open('env.log', 'a') as f:
-                        f.write(f"Joi replied: {reply}\n")
-                except Exception as e:
-                    logging.error(f"Failed to write to log file: {e}")
             # Log AI reply to file only in non-production environments
             if os.getenv('ENV') != 'production':
                 try:
@@ -89,7 +80,8 @@ def process_chat():
                         f.write(f"Joi replied: {reply}\n")
                 except Exception as e:
                     logging.error(f"Failed to write to log file: {e}")
-# Append AI reply to conversation
+
+            # Append AI reply to conversation
             conversation.append({'role': 'assistant', 'content': reply})
 
             return jsonify({'reply': reply}), 200
