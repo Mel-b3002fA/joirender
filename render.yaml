@@ -4,19 +4,17 @@ services:
     env: docker
     dockerfilePath: ./Dockerfile
     dockerCommand: /app/run.sh
-    plan: starter  
+    plan: starter  # Upgrade to Starter plan for more resources
     disk:
       name: ollama-models
       mountPath: /root/.ollama
-      sizeGB: 1 
+      sizeGB: 10  # 10 GB for model storage
     envVars:
       - key: PYTHON_VERSION
         value: 3.10.0
       - key: PORT
         value: 8000
       - key: OLLAMA_URL
-        value: http://localhost:11434  
+        value: http://localhost:11434
       - key: ENV
         value: production
-
- 
