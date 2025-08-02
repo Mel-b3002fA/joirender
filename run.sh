@@ -17,12 +17,13 @@ timeout 120 bash -c 'until curl -s http://localhost:11434/api/tags > /dev/null; 
     sleep 2
 done' || { echo "ERROR: Ollama failed to start within 120 seconds"; cat $OLLAMA_LOG; exit 1; }
 
-# Check if llama3:8b model exists, pull if not
-if ! ollama list | grep -q "llama3:8b"; then
-    echo "Pulling llama3:8b model..."
-    ollama pull llama3:8b >> $OLLAMA_LOG 2>&1 || { echo "ERROR: Failed to pull llama3:8b model"; cat $OLLAMA_LOG; exit 1; }
+if ! ollama list | grep -q "phi3:mini"; then
+    echo "Pulling phi3:mini model..."
+    ollama pull phi3:mini >> $OLLAMA_LOG 2>&1 || { echo "ERROR: Failed to pull phi3:mini model"; cat $OLLAMA_LOG; exit 1; }
+    echo "Model pull completed. Listing models:"
+    ollama list
 else
-    echo "llama3:8b model already exists, skipping pull"
+    echo "phi3:mini model already exists, skipping pull"
 fi
 
 # Verify Ollama API
