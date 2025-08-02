@@ -4,7 +4,7 @@ services:
     env: docker
     dockerfilePath: ./Dockerfile
     dockerCommand: /app/run.sh
-    plan: starter  # Upgrade to Starter plan for more resources
+    plan: free  # Free plan should work for phi3:mini
     disk:
       name: ollama-models
       mountPath: /root/.ollama
@@ -18,3 +18,5 @@ services:
         value: http://localhost:11434
       - key: ENV
         value: production
+      - key: PHI_MODEL
+        value: phi3:mini
