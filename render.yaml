@@ -1,22 +1,17 @@
+
 services:
-  - type: web
-    name: "llama3-flask-app"
-    env: docker
-    dockerfilePath: ./Dockerfile
-    dockerCommand: /app/run.sh
-    plan: free  # Free plan should work for phi3:mini
-    disk:
-      name: ollama-models
-      mountPath: /root/.ollama
-      sizeGB: 10  # 10 GB for model storage
-    envVars:
-      - key: PYTHON_VERSION
-        value: 3.10.0
-      - key: PORT
-        value: 8000
-      - key: OLLAMA_URL
-        value: http://localhost:11434
-      - key: ENV
-        value: production
-      - key: PHI_MODEL
-        value: phi3:mini
+     - type: web
+       name: "llama3-flask-app"
+       env: docker
+       dockerfilePath: ./Dockerfile
+       dockerCommand: /app/run.sh
+       plan: free
+       envVars:
+         - key: PYTHON_VERSION
+           value: 3.10.0
+         - key: PORT
+           value: 8000  # Explicitly set to 8000
+         - key: OLLAMA_URL
+           value: http://localhost:11434/api/chat
+         - key: ENV
+           value: production
